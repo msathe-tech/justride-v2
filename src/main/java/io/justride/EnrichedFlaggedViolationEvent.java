@@ -19,9 +19,15 @@ class EnrichedFlaggedViolationEvent  {
     public EnrichedFlaggedViolationEvent() {
     }
 
-    private String key, uuid;
-    private long start, end, count;
-    private Double lastLatitude, lastLongitude, lastSpeed, maxSpeed;
+    private String key;
+    private String uuid;
+    private long start;
+    private long end;
+    private long count;
+    private Double lastLatitude;
+    private Double lastLongitude;
+    private Double lastSpeed;
+    private Double maxSpeed;
     private Date violationTime;
 
     public String getKey() {

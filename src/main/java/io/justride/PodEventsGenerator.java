@@ -63,7 +63,7 @@ public class PodEventsGenerator {
         private final Log logger = LogFactory.getLog(getClass());
 
         @StreamListener(ViolationsSink.INPUT)
-        public void receive(FlaggedViolationEvent data) {
+        public void receive(EnrichedFlaggedViolationEvent data) {
             logger.info("Data received..." + data);
         }
     }
