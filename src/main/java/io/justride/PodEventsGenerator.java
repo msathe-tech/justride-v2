@@ -56,6 +56,7 @@ public class PodEventsGenerator {
     }
 
     //Following sink is used as test consumer for the above processor. It logs the data received through the processor.
+
     @EnableBinding(ViolationsSink.class)
     static class TestConsumer {
 
@@ -76,6 +77,7 @@ public class PodEventsGenerator {
         SubscribableChannel violations();
 
     }
+
 
     interface PodsSource {
 

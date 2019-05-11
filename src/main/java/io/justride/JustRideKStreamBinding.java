@@ -9,6 +9,7 @@ interface JustRideKStreamBinding {
     @Input("pods-in")
     KStream<?, ?> podsIn();
 
+
     @Output("violations-out")
     KStream<?, ?> violationsOut();
 
