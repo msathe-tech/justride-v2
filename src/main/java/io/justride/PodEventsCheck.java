@@ -66,7 +66,7 @@ public class PodEventsCheck {
 
         }
         /*
-        // Working code without return OUTPUT_TOPIC
+        // Working code with Windowing but without return OUTPUT_TOPIC
         @StreamListener(INPUT_TOPIC)
         //@SendTo(OUTPUT_TOPIC)
         public void process(KStream<Object, PodEvent> input) {
