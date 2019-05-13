@@ -1,5 +1,6 @@
 package io.justride;
 
+import java.time.Duration;
 import java.util.Date;
 
 class EnrichedFlaggedViolationEvent  {

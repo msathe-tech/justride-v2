@@ -60,6 +60,7 @@ public class PodEventsCheck {
                     );
             KStream<Windowed<String>, FlaggedViolationEvent> fveStream = aggregateTable.toStream();
             fveStream.foreach((key, value) -> System.out.println("fveStream - key =" + key.toString() + ", value = " + value.toString()));
+
             return fveStream.map((k, v) ->
                     new KeyValue(null, new EnrichedFlaggedViolationEvent(k.key(), k.window().start(), k.window().end(), v.getCount(), v.getLastLatitude(),
                             v.getLastLongitude(), v.getLastSpeed(), v.getMaxSpeed(), v.getUuid(), v.getViolationTime())));
