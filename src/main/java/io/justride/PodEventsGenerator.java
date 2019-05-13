@@ -35,7 +35,7 @@ public class PodEventsGenerator {
         private Random random = new Random();
 
         @Bean
-        @InboundChannelAdapter(channel = PodsSource.OUTPUT, poller = @Poller(fixedDelay = "3000"))
+        @InboundChannelAdapter(channel = PodsSource.OUTPUT, poller = @Poller(fixedDelay = "1000"))
         public MessageSource<PodEvent> sendTestData() {
 
             return () -> {
@@ -64,7 +64,7 @@ public class PodEventsGenerator {
 
         @StreamListener(ViolationsSink.INPUT)
         public void receive(EnrichedFlaggedViolationEvent data) {
-            logger.info("Data received..." + data);
+            System.out.println("Data received..." + data);
         }
     }
 

@@ -41,11 +41,11 @@ public class FlaggedViolationEvent {
     public String toString() {
         return "FlaggedViolationEvent{" +
                 "uuid=" + uuid +
+                ", count=" + count +
                 ", lastSpeed=" + lastSpeed +
                 ", maxSpeed=" + maxSpeed +
                 ", lastLatitude=" + lastLatitude +
                 ", lastLongitude=" + lastLongitude +
-                ", count=" + count +
                 '}';
     }
 

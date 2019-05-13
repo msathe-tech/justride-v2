@@ -114,10 +114,11 @@ class EnrichedFlaggedViolationEvent  {
     public String toString() {
         return "EnrichedFlaggedViolationEvent{" +
                 "key='" + key + '\'' +
-                ", uuid='" + uuid + '\'' +
-                ", start=" + start +
-                ", end=" + end +
                 ", count=" + count +
+                ", uuid='" + uuid + '\'' +
+                ", window=" + (((end - start) / 1000) % 60) +
+                //", start=" + start +
+                //", end=" + end +
                 ", lastLatitude=" + lastLatitude +
                 ", lastLongitude=" + lastLongitude +
                 ", lastSpeed=" + lastSpeed +
