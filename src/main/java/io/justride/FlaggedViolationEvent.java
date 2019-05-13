@@ -25,7 +25,7 @@ public class FlaggedViolationEvent {
                 ? this.getMaxSpeed() : pe.getSpeed();
         this.violationTime = new Date();
         this.count++;
-
+        System.out.println("addPodEvent: uuid=" + uuid + ", count=" + count +", vTime=" + violationTime.toString());
         return this;
     }
 

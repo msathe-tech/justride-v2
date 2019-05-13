@@ -10,12 +10,19 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.state.KeyValueIterator;
+import org.apache.kafka.streams.state.QueryableStoreTypes;
+import org.apache.kafka.streams.state.ReadOnlyWindowStore;
 import org.apache.kafka.streams.state.WindowStore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQueryService;
 import org.springframework.kafka.support.serializer.JsonSerde;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.Duration;
 import java.util.Date;
@@ -26,11 +33,17 @@ public class PodEventsCheck {
 
 
     @EnableBinding(JustRideKStreamBinding.class)
+    @EnableScheduling
     public static class PodEventsProcessor {
 
-        public static final String INPUT_TOPIC = "pods-in";
-        public static final String OUTPUT_TOPIC = "violations-out";
-        public static final int WINDOW_SIZE_MS = 10000;
+        @Autowired
+        private InteractiveQueryService iqs;
+
+        static final String INPUT_TOPIC = "pods-in";
+        static final String OUTPUT_TOPIC = "violations-out";
+        static final int WINDOW_SIZE_MS = 10000;
+        static final long SPEED_THRESHOLD = 70L;
+        static final String WINDOW_STORE = "pod-events-snapshots";
 
         private final Log logger = LogFactory.getLog(getClass());
 
@@ -45,15 +58,15 @@ public class PodEventsCheck {
                     new JsonSerde<>(FlaggedViolationEvent.class, flaggedViolationEventMapper);
 
             KTable<Windowed<String>, FlaggedViolationEvent> aggregateTable = input
-                    .filter((key, value) -> value.getSpeed() > 70)
+                    .filter((key, value) -> value.getSpeed() > SPEED_THRESHOLD)
                     .groupBy((key, value) -> value.getUuid(),
                             Serialized.with(Serdes.String(), podEventSerde))
-                    .windowedBy(TimeWindows.of(TimeUnit.SECONDS.toMillis(WINDOW_SIZE_MS)))
+                    .windowedBy(TimeWindows.of(WINDOW_SIZE_MS))
                     .aggregate(FlaggedViolationEvent::new,
                             (key, pe, fve) -> fve.addPodEvent(pe),
                             Materialized
                                     .<String, FlaggedViolationEvent, WindowStore<Bytes, byte[]>
-                                            >as("pod-events-snapshots")
+                                            >as(WINDOW_STORE)
                                     .withKeySerde(Serdes.String())
                                     .withValueSerde(flaggedViolationEventSerde)
 
@@ -66,6 +79,22 @@ public class PodEventsCheck {
                             v.getLastLongitude(), v.getLastSpeed(), v.getMaxSpeed(), v.getUuid(), v.getViolationTime())));
 
         }
+
+        // Scheduled Query on the WindowStore to find out FlaggedViolationEvents
+        @Scheduled(fixedRate = 30000, initialDelay = 5000)
+        public void printProductCounts() {
+
+            ReadOnlyWindowStore violationsStore = iqs.getQueryableStore(WINDOW_STORE, QueryableStoreTypes.windowStore());
+
+            KeyValueIterator all = violationsStore.all();
+
+            all.forEachRemaining(o -> {
+                KeyValue kv = (KeyValue) o;
+                System.out.println("From key watch: " + ((Windowed) kv.key).window());
+                System.out.println("From value watch: " + kv.value);
+            });
+        }
+
         /*
         // Working code with Windowing but without return OUTPUT_TOPIC
         @StreamListener(INPUT_TOPIC)
