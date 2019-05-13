@@ -30,7 +30,7 @@ public class PodEventsCheck {
 
         public static final String INPUT_TOPIC = "pods-in";
         public static final String OUTPUT_TOPIC = "violations-out";
-        public static final int WINDOW_SIZE_MS = 100000;
+        public static final int WINDOW_SIZE_MS = 20000;
 
         private final Log logger = LogFactory.getLog(getClass());
 
@@ -61,7 +61,7 @@ public class PodEventsCheck {
             KStream<Windowed<String>, FlaggedViolationEvent> fveStream = aggregateTable.toStream();
             fveStream.foreach((key, value) -> System.out.println("fveStream - " + value.toString()));
             return fveStream.map((k, v) ->
-                    new KeyValue(v.getUuid(), new EnrichedFlaggedViolationEvent(k.key(), k.window().start(), k.window().end(), v.getCount(), v.getLastLatitude(),
+                    new KeyValue(null, new EnrichedFlaggedViolationEvent(k.key(), k.window().start(), k.window().end(), v.getCount(), v.getLastLatitude(),
                             v.getLastLongitude(), v.getLastSpeed(), v.getMaxSpeed(), v.getUuid(), v.getViolationTime())));
 
         }
