@@ -13,8 +13,8 @@ interface JustRideKStreamBinding {
     @Output("violations-out")
     KStream<?, ?> violationsOut();
 
-    /*
-    @Input("violations")
+
+    @Input("violations-in")
     KStream<?, ?> violationsIn();
-    */
+
 }

@@ -3,10 +3,11 @@ spring:
     name: justride-v2
 
 spring.cloud.stream.bindings.violations-out.contentType: application/json
+spring.cloud.stream.bindings.violations-in.contentType: application/json
 spring.cloud.stream.bindings.pods-in.contentType: application/json
 spring.cloud.stream.kafka.streams.binder.configuration.commit.interval.ms: 1000
 spring.cloud.stream.kafka.streams:
-  binder.configuration:
+  #binder.configuration:
     #default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
     #default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
   bindings.pods-in.consumer.application-id: justride-v2
@@ -15,6 +16,8 @@ spring.cloud.stream.bindings.violations-out:
 spring.cloud.stream.bindings.pods-in:
   destination: pods
 
+spring.cloud.stream.bindings.violations-in:
+  destination: violations
 
 #Pod Events generator
 spring.cloud.stream.bindings.violations.destination: violations

@@ -5,8 +5,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.*;
@@ -24,9 +22,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.Duration;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import io.justride.model.*;
 
 @SpringBootApplication
 public class PodEventsCheck {

@@ -17,6 +17,8 @@ import org.springframework.messaging.support.GenericMessage;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.justride.model.*;
+
 public class PodEventsGenerator {
 
     @EnableBinding(PodsSource.class)

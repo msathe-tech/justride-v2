@@ -1,4 +1,4 @@
-package io.justride;
+package io.justride.model;
 
 import java.io.Serializable;
 

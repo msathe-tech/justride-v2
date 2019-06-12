@@ -1,9 +1,9 @@
-package io.justride;
+package io.justride.model;
 
 import java.time.Duration;
 import java.util.Date;
 
-class EnrichedFlaggedViolationEvent  {
+public class EnrichedFlaggedViolationEvent  {
     public EnrichedFlaggedViolationEvent(String key, long start, long end, long count, Double lastLatitude, Double lastLongitude, Double lastSpeed, Double maxSpeed, String uuid, Date violationTime) {
         this.key = key;
         this.start = start;
